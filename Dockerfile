@@ -37,6 +37,11 @@ RUN /opt/android-sdk-linux/cmdline-tools/tools/bin/sdkmanager "platform-tools"
 RUN /opt/android-sdk-linux/cmdline-tools/tools/bin/sdkmanager "platforms;android-29"
 RUN /opt/android-sdk-linux/cmdline-tools/tools/bin/sdkmanager "system-images;android-29;google_apis;x86_64"
 
-RUN gem install --no-document rake fastlane
+RUN gem install --no-document bundler
+RUN gem install --no-document rake
+RUN gem install --no-document fastlane
+RUN gem install --no-document google-cloud-storage
+RUN gem install --no-document fastlane-plugin-huawei_appgallery_connect
+
 
 CMD /opt/tools/entrypoint.sh built-in
