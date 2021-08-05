@@ -1,6 +1,16 @@
-# Docker for Android SDK 29
+# Docker for Android SDK 30
 
-Docker for Android SDK 29 with preinstalled build tools and emulator image
+Docker for Android SDK 30 with preinstalled build tools and emulator image
+
+
+  
+- To build the docker image:
+
+```bash
+docker build . -t zkrige/fastlane:latest
+docker push zkrige/fastlane
+```
+
 
 > Edit from [mindrunner/docker-android-sdk](https://github.com/mindrunner/docker-android-sdk)
 
@@ -14,7 +24,7 @@ Docker for Android SDK 29 with preinstalled build tools and emulator image
   emulator                                    | 30.1.5  | Android Emulator                           | emulator/
   patcher;v4                                  | 1       | SDK Patch Applier v4                       | patcher/v4/
   platform-tools                              | 30.0.4  | Android SDK Platform-Tools                 | platform-tools/
-  platforms;android-29                        | 5       | Android SDK Platform 29                    | platforms/android-29/
+  platforms;android-30                        | 5       | Android SDK Platform 30                    | platforms/android-29/
   system-images;android-29;google_apis;x86_64 | 11      | Google APIs Intel x86 Atom_64 System Image | system-images/android-29/google_apis/x86_64/
 ```
 
@@ -43,3 +53,4 @@ Docker for Android SDK 29 with preinstalled build tools and emulator image
   $ docker run -it --rm androidsdk/android-29:latest avdmanager list avd
   # You can also run other Android platform tools, which are all added to the PATH environment variable
   ```
+  
