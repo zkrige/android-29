@@ -7,7 +7,7 @@ Docker for Android SDK 30 with preinstalled build tools and emulator image
 - To build the docker image:
 
 ```bash
-docker build . -t zkrige/fastlane:latest
+docker build . -t zkrige/fastlane:latest --platform linux/amd64
 docker push zkrige/fastlane
 ```
 
@@ -17,26 +17,27 @@ docker push zkrige/fastlane
 **Installed Packages**
 ```bash
 # sdkmanager --list
-  Path                                        | Version | Description                                | Location
-  -------                                     | ------- | -------                                    | -------
-  build-tools;30.0.2                          | 30.0.2  | Android SDK Build-Tools 30.0.2             | build-tools/30.0.2/
-  cmdline-tools;latest                        | 2.1     | Android SDK Command-line Tools (latest)    | cmdline-tools/latest/
-  emulator                                    | 30.1.5  | Android Emulator                           | emulator/
-  patcher;v4                                  | 1       | SDK Patch Applier v4                       | patcher/v4/
-  platform-tools                              | 30.0.4  | Android SDK Platform-Tools                 | platform-tools/
-  platforms;android-30                        | 5       | Android SDK Platform 30                    | platforms/android-29/
-  system-images;android-29;google_apis;x86_64 | 11      | Google APIs Intel x86 Atom_64 System Image | system-images/android-29/google_apis/x86_64/
+  Path                                        | Version | Description                                | Location                                   
+  -------                                     | ------- | -------                                    | -------                                    
+  build-tools;32.0.0                          | 32.0.0  | Android SDK Build-Tools 32                 | build-tools/32.0.0                         
+  cmdline-tools;2.1                           | 2.1.0   | Android SDK Tools 2.1                      | tools                                      
+  cmdline-tools;latest                        | 6.0     | Android SDK Command-line Tools (latest)    | cmdline-tools/latest                       
+  emulator                                    | 31.2.9  | Android Emulator                           | emulator                                   
+  patcher;v4                                  | 1       | SDK Patch Applier v4                       | patcher/v4                                 
+  platform-tools                              | 33.0.1  | Android SDK Platform-Tools                 | platform-tools                             
+  platforms;android-32                        | 1       | Android SDK Platform 32                    | platforms/android-32                       
+  system-images;android-32;google_apis;x86_64 | 3       | Google APIs Intel x86 Atom_64 System Image | system-images/android-32/google_apis/x86_64
 ```
 
 **Usage**
 
 - Interactive way
   ```bash
-  $ docker run -it --rm --privileged androidsdk/android-29:latest bash
+  $ docker run -it --rm --privileged androidsdk/android-32:latest bash
   # check installed packages
   $ sdkmanager --list
   # create and run emulator
-  $ avdmanager create avd -n first_avd --abi google_apis/x86_64 -k "system-images;android-29;google_apis;x86_64"
+  $ avdmanager create avd -n first_avd --abi google_apis/x86_64 -k "system-images;android-32;google_apis;x86_64"
   $ emulator -avd first_avd -no-window -no-audio &
   $ adb devices
   # You can also run other Android platform tools, which are all added to the PATH environment variable
@@ -48,9 +49,9 @@ docker push zkrige/fastlane
 - Non-interactive way
   ```bash
   # check installed packages
-  $ docker run -it --rm androidsdk/android-29:latest sdkmanager --list
+  $ docker run -it --rm androidsdk/android-32:latest sdkmanager --list
   # list existing emulators
-  $ docker run -it --rm androidsdk/android-29:latest avdmanager list avd
+  $ docker run -it --rm androidsdk/android-32:latest avdmanager list avd
   # You can also run other Android platform tools, which are all added to the PATH environment variable
   ```
   
