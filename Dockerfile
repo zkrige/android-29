@@ -37,6 +37,9 @@ RUN /opt/android-sdk-linux/cmdline-tools/tools/bin/sdkmanager "platform-tools"
 RUN /opt/android-sdk-linux/cmdline-tools/tools/bin/sdkmanager "platforms;android-32"
 RUN /opt/android-sdk-linux/cmdline-tools/tools/bin/sdkmanager "system-images;android-32;google_apis;x86_64"
 
+RUN gem install --no-document rubygems-update
+RUN update_rubygems
+RUN gem update --no-document --system 3.0.6
 RUN gem install --no-document bundler
 RUN gem install --no-document rake
 RUN gem install --no-document fastlane
