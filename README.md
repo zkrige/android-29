@@ -33,7 +33,7 @@ docker push zkrige/fastlane
 
 - Interactive way
   ```bash
-  $ docker run -it --rm --privileged androidsdk/android-32:latest bash
+  $ docker run -it --rm --device /dev/kvm androidsdk/android-32:latest bash
   # check installed packages
   $ sdkmanager --list
   # create and run emulator
@@ -43,7 +43,7 @@ docker push zkrige/fastlane
   # You can also run other Android platform tools, which are all added to the PATH environment variable
   ```
 
-  To connect the emulator using `adb` on the docker host machine, start the container with `--net=host`.
+  To connect the emulator using `adb` on the docker host machine, start the container with `--network host`.
   You could also use [`scrcpy`](https://github.com/Genymobile/scrcpy) to do a screencast of the emulator.
 
 - Non-interactive way
