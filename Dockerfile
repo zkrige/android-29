@@ -18,14 +18,14 @@ ENV LC_ALL=en_US.UTF-8
 ENV LANG=en_US.UTF-8
 
 RUN apt-get update -yqq
-RUN apt-get install -y curl expect git libc6 libgcc1 libncurses5 libstdc++6 zlib1g openjdk-11-jdk wget unzip vim ruby ruby-dev build-essential
+RUN apt-get install -y curl expect git libc6 libgcc1 libncurses5 libstdc++6 zlib1g openjdk-17-jdk wget unzip vim ruby ruby-dev build-essential
 RUN apt-get clean
 
 RUN groupadd android && useradd -d /opt/android-sdk-linux -g android android
 
 COPY tools /opt/tools
 COPY licenses /opt/licenses
-COPY rt.jar /usr/lib/jvm/java-11-openjdk-amd64/lib
+COPY rt.jar /usr/lib/jvm/java-17-openjdk-amd64/lib
 
 WORKDIR /opt/android-sdk-linux
 RUN chmod +x /opt/tools/android-sdk-update.sh
