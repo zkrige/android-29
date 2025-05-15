@@ -1,46 +1,44 @@
-FROM ubuntu:22.10
+FROM openjdk:17-bullseye
 
-ENV DEBIAN_FRONTEND noninteractive
+# Set environment variables
+ENV ANDROID_HOME=/usr/local/android-sdk-linux
+ENV PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
+ENV ANDROID_VERSION=35
+ENV ANDROID_BUILD_TOOLS_VERSION=35.0.0
+ENV ANDROID_SDK_URL=https://dl.google.com/android/repository/commandlinetools-linux-10406996_latest.zip
 
-ENV ANDROID_HOME      /opt/android-sdk-linux
-ENV ANDROID_SDK_HOME  ${ANDROID_HOME}
-ENV ANDROID_SDK_ROOT  ${ANDROID_HOME}
-ENV ANDROID_SDK       ${ANDROID_HOME}
+# Step 1: Install Ruby from backports (includes Ruby >= 3)
+RUN echo "deb http://deb.debian.org/debian bullseye-backports main" > /etc/apt/sources.list.d/backports.list && \
+    apt-get update && \
+    apt-get install -y -t bullseye-backports ruby ruby-dev
 
-ENV PATH "${PATH}:${ANDROID_HOME}/cmdline-tools/latest/bin"
-ENV PATH "${PATH}:${ANDROID_HOME}/cmdline-tools/tools/bin"
-ENV PATH "${PATH}:${ANDROID_HOME}/tools/bin"
-ENV PATH "${PATH}:${ANDROID_HOME}/build-tools/35.0.0"
-ENV PATH "${PATH}:${ANDROID_HOME}/platform-tools"
-ENV PATH "${PATH}:${ANDROID_HOME}/emulator"
-ENV PATH "${PATH}:${ANDROID_HOME}/bin"
-ENV LC_ALL=en_US.UTF-8
-ENV LANG=en_US.UTF-8
+# Step 2: Install base tools and Android SDK command line tools
+RUN apt-get install -y curl unzip && \
+    mkdir -p "$ANDROID_HOME/cmdline-tools" "$HOME/.android" && \
+    cd "$ANDROID_HOME" && \
+    curl -o sdk.zip $ANDROID_SDK_URL && \
+    unzip sdk.zip -d cmdline-tools-temp && \
+    mv cmdline-tools-temp/cmdline-tools "$ANDROID_HOME/cmdline-tools/latest" && \
+    rm -rf sdk.zip cmdline-tools-temp
 
-RUN apt-get update -yqq
-RUN apt-get install -y curl expect git libc6 libgcc1 libncurses5 libstdc++6 zlib1g openjdk-17-jdk wget unzip vim ruby ruby-dev build-essential
-RUN apt-get clean
+# Step 3: Accept licenses and install SDK components
+RUN yes | sdkmanager --licenses && \
+    sdkmanager --update && \
+    sdkmanager \
+        "build-tools;${ANDROID_BUILD_TOOLS_VERSION}" \
+        "platforms;android-${ANDROID_VERSION}" \
+        "platform-tools" \
+        "extras;android;m2repository" \
+        "extras;google;m2repository"
 
-RUN groupadd android && useradd -d /opt/android-sdk-linux -g android android
-
-COPY tools /opt/tools
-COPY licenses /opt/licenses
-COPY rt.jar /usr/lib/jvm/java-17-openjdk-amd64/lib
-
-WORKDIR /opt/android-sdk-linux
-RUN chmod +x /opt/tools/android-sdk-update.sh
-RUN /opt/tools/entrypoint.sh built-in
-
-RUN /opt/android-sdk-linux/cmdline-tools/tools/bin/sdkmanager "cmdline-tools;latest"
-RUN /opt/android-sdk-linux/cmdline-tools/tools/bin/sdkmanager "build-tools;35.0.0"
-RUN /opt/android-sdk-linux/cmdline-tools/tools/bin/sdkmanager "platform-tools"
-RUN /opt/android-sdk-linux/cmdline-tools/tools/bin/sdkmanager "platforms;android-35"
-RUN /opt/android-sdk-linux/cmdline-tools/tools/bin/sdkmanager "system-images;android-35;google_apis;x86_64"
-
-RUN gem install --no-document bundler
-RUN gem install --no-document rake
-RUN gem install --no-document fastlane
-RUN gem install --no-document google-cloud-storage
-RUN gem install --no-document fastlane-plugin-huawei_appgallery_connect
-
-CMD /opt/tools/entrypoint.sh built-in
+# Step 4: Install Fastlane and build tools
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y \
+        build-essential \
+        git \
+        bundler \
+        rake && \
+    gem install fastlane && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
+    apt-get autoremove -y && \
+    apt-get clean
