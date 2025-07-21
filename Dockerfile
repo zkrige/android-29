@@ -1,10 +1,10 @@
-FROM openjdk:17-bullseye
+FROM openjdk:21-bullseye
 
 # Set environment variables
 ENV ANDROID_HOME=/usr/local/android-sdk-linux
 ENV PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
-ENV ANDROID_VERSION=35
-ENV ANDROID_BUILD_TOOLS_VERSION=35.0.0
+ENV ANDROID_VERSION=36
+ENV ANDROID_BUILD_TOOLS_VERSION=36.0.0
 ENV ANDROID_SDK_URL=https://dl.google.com/android/repository/commandlinetools-linux-10406996_latest.zip
 
 # Step 1: Install Ruby from backports (includes Ruby >= 3)
